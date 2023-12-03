@@ -1,47 +1,46 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 const API = process.env.REACT_APP_API_URL;
+
 function BookmarkEditForm() {
-  const navigate = useNavigate();
-  let { index } = useParams();
+  let { id } = useParams();
+  let navigate = useNavigate();
 
   const [bookmark, setBookmark] = useState({
     name: "",
     url: "",
     category: "",
-    description: "",
-    isFavorite: false,
+    is_favorite: false,
   });
-  const updateBookmark = () => {
+
+  const updateBookmark = (updatedBookmark) => {
     axios
-      .put(`${API}/bookmarks/${index}`, bookmark)
-      .then((response) => {
-        setBookmark(response.data);
-        navigate(`/bookmarks/${index}`);
+      .put(`${API}/bookmarks/${id}`, updatedBookmark)
+      .then(() => {
+        navigate(`/bookmarks/${id}`);
       })
-      .catch((c) => console.warn("catch", c));
+      .catch((c) => console.error("catch", c));
   };
+
   const handleTextChange = (event) => {
     setBookmark({ ...bookmark, [event.target.id]: event.target.value });
   };
 
   const handleCheckboxChange = () => {
-    setBookmark({ ...bookmark, isFavorite: !bookmark.isFavorite });
+    setBookmark({ ...bookmark, is_favorite: !bookmark.is_favorite });
   };
 
   useEffect(() => {
     axios
-      .get(`${API}/bookmarks/${index}`)
-      .then((response) => {
-        setBookmark(response.data);
-      })
-      .catch((e) => console.error(e));
-  }, [index]);
+      .get(`${API}/bookmarks/${id}`)
+      .then((response) => setBookmark(response.data))
+      .catch(() => navigate(`/not-found`));
+  }, [id, navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    updateBookmark();
+    updateBookmark(bookmark, id);
   };
   return (
     <div className="Edit">
@@ -74,26 +73,19 @@ function BookmarkEditForm() {
           placeholder="educational, inspirational, ..."
           onChange={handleTextChange}
         />
-        <label htmlFor="isFavorite">Favorite:</label>
+        <label htmlFor="is_favorite">Favorite:</label>
         <input
-          id="isFavorite"
+          id="is_favorite"
           type="checkbox"
           onChange={handleCheckboxChange}
-          checked={bookmark.isFavorite}
+          checked={bookmark.is_favorite}
         />
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          name="description"
-          value={bookmark.description}
-          onChange={handleTextChange}
-          placeholder="Describe why you bookmarked this site"
-        />
+
         <br />
 
         <input type="submit" />
       </form>
-      <Link to={`/bookmarks/${index}`}>
+      <Link to={`/bookmarks/${id}`}>
         <button>Nevermind!</button>
       </Link>
     </div>

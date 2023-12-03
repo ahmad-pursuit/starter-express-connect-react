@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
-function Bookmark({ bookmark, index }) {
+function Bookmark({ bookmark }) {
   return (
     <tr>
       <td>
-        {bookmark.isFavorite ? (
+        {bookmark.is_favorite ? (
           <span>⭐️</span>
         ) : (
           <span>&nbsp; &nbsp; &nbsp;</span>
@@ -15,8 +15,8 @@ function Bookmark({ bookmark, index }) {
           {bookmark.name}
         </a>
       </td>
-      <td>
-        <Link to={`/bookmarks/${index}`}>✏️</Link>
+      <td className="Bookmark">
+        <Link to={`/bookmarks/${bookmark.id}`}>✏️</Link>
       </td>
     </tr>
   );

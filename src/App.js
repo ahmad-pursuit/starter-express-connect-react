@@ -22,8 +22,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/bookmarks" element={<Index />} />
             <Route path="/bookmarks/new" element={<New />} />
-            <Route path="/bookmarks/:index" element={<Show />} />
-            <Route path="/bookmarks/:index/edit" element={<Edit />} />
+            <Route exact path="/bookmarks/:id" element={<Show />} />
+            <Route path="/bookmarks/:id/edit" element={<Edit />} />
             <Route path="*" element={<FourOFour />} />
           </Routes>
         </main>

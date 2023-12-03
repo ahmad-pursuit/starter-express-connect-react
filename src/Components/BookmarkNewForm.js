@@ -1,31 +1,34 @@
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 const API = process.env.REACT_APP_API_URL;
+
 function BookmarkNewForm() {
-  const navigate = useNavigate();
+  let navigate = useNavigate();
+
+  const addBookmark = (newBookmark) => {
+    axios
+      .post(`${API}/bookmarks`, newBookmark)
+      .then(() => {
+        navigate(`/bookmarks`);
+      })
+      .catch((c) => console.error("catch", c));
+  };
+
   const [bookmark, setBookmark] = useState({
     name: "",
     url: "",
     category: "",
-    isFavorite: false,
-    description: "",
+    is_favorite: false,
   });
-  const addBookmark = (newBookmark) => {
-    axios
-    .post(`${API}/bookmarks`, newBookmark)
-    .then(
-    () => {
-    navigate(`/bookmarks`);
-    })
-    .catch((c) => console.error("catch", c));
-   };
+
   const handleTextChange = (event) => {
     setBookmark({ ...bookmark, [event.target.id]: event.target.value });
   };
 
   const handleCheckboxChange = () => {
-    setBookmark({ ...bookmark, isFavorite: !bookmark.isFavorite });
+    setBookmark({ ...bookmark, is_favorite: !bookmark.is_favorite });
   };
 
   const handleSubmit = (event) => {
@@ -63,21 +66,14 @@ function BookmarkNewForm() {
           placeholder="educational, inspirational, ..."
           onChange={handleTextChange}
         />
-        <label htmlFor="isFavorite">Favorite:</label>
+        <label htmlFor="is_favorite">Favorite:</label>
         <input
-          id="isFavorite"
+          id="is_favorite"
           type="checkbox"
           onChange={handleCheckboxChange}
-          checked={bookmark.isFavorite}
+          checked={bookmark.is_favorite}
         />
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          name="description"
-          value={bookmark.description}
-          onChange={handleTextChange}
-          placeholder="Describe why you bookmarked this site"
-        />
+
         <br />
         <input type="submit" />
       </form>
@@ -85,4 +81,5 @@ function BookmarkNewForm() {
   );
 }
 
+// export default withRouter(BookmarkNewForm);
 export default BookmarkNewForm;

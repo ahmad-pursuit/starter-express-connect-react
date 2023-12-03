@@ -1,17 +1,17 @@
-import { useState } from "react";
-import Bookmark from "./Bookmark";
 import axios from "axios";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import Bookmark from "./Bookmark";
+
 const API = process.env.REACT_APP_API_URL;
+
 function Bookmarks() {
   const [bookmarks, setBookmarks] = useState([]);
   useEffect(() => {
     axios
       .get(`${API}/bookmarks`)
       .then((response) => setBookmarks(response.data))
-      .catch((e) => console.error("catch", e));
+      .catch((c) => console.error("catch", c));
   }, []);
- 
   return (
     <div className="Bookmarks">
       <section>
@@ -24,8 +24,8 @@ function Bookmarks() {
             </tr>
           </thead>
           <tbody>
-            {bookmarks.map((bookmark, index) => {
-              return <Bookmark key={index} bookmark={bookmark} index={index} />;
+            {bookmarks.map((bookmark) => {
+              return <Bookmark key={bookmark.id} bookmark={bookmark} />;
             })}
           </tbody>
         </table>
